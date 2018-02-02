@@ -1,0 +1,19 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Bamazon Customer Marketplace",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StephenDK/Bamazon.git"
+  },
+  "author": "Stephen Klein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StephenDK/Bamazon/issues"
+  },
+  "homepage": "https://github.com/StephenDK/Bamazon#readme"
+}
