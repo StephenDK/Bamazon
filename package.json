@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/StephenDK/Bamazon/issues"
   },
-  "homepage": "https://github.com/StephenDK/Bamazon#readme"
+  "homepage": "https://github.com/StephenDK/Bamazon#readme",
+  "dependencies": {
+    "inquirer": "^5.0.1"
+  }
 }
