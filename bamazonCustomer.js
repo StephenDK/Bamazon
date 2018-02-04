@@ -10,8 +10,8 @@ var mysql = require('mysql');
 // Section 2
 // Functions and listeners
 
-// This functions connects to the database
-function connectToDatabase () {
+
+
 
     var connection = mysql.createConnection({
         host: "localhost",
@@ -24,12 +24,21 @@ function connectToDatabase () {
     connection.connect(function(err) {
         if (err) throw err;
             console.log("Connected with id: " + connection.threadId);
-            connection.end();
-        
+            // connection.end();
+        retrieveDatabaseData();
     });
-}
-connectToDatabase();
+
+function retrieveDatabaseData () {
+    connection.query("SELECT * FROM products", function(err, res){
+        if (err) throw err;
+        console.log(res);
+        connection.end();
+    })
+};
+
 
 
 // Section 3
 // Main Process
+
+
