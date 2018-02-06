@@ -31,7 +31,18 @@ var mysql = require('mysql');
 function retrieveDatabaseData () {
     connection.query("SELECT * FROM products", function(err, res){
         if (err) throw err;
-        console.log(res);
+        // console.log(res);
+        console.log("Items for Sale: ")
+        console.log("-------------");
+
+        var itemList = [];
+        for (var i = 0; i < res.length; i++) {
+            itemList.push(res[i].product_name);
+            
+            console.log(itemList[i]);
+        }
+        
+
         connection.end();
     })
 };
