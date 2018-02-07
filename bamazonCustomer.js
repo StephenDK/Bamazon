@@ -22,56 +22,67 @@ connection.connect(function(err) {
     if (err) throw err;
         console.log("Connected with id: " + connection.threadId + "\n");
         console.log("Welcome to Bamazon!!");
-        retrieveDatabaseData();
+        start();
             
 });
 
-// This function will prompt the user for item id and quantity wanted for purchase
-function startSalePrompt () {
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "productID",
-            message: "Enter the product id of which you would like to buy."
-        },
-        {
-            type: "input",
-            name: "quantityWanted",
-            message: "How many would you like to purchase?"
-        }
-    ]).then(function(purchaseAnswer) {
-        console.log(purchaseAnswer.productID);
-        console.log(purchaseAnswer.quantityWanted);
-        console.log("-----------");
-        var typeMe = purchaseAnswer.quantityWanted;
+function start() {
+    inquirer
+        .prompt({
+            name: "customerOrManager",
+            type: "rawlist",
+            message: "Are you a [Customer] or [Manager] of Bamazon?",
+            choices: ["Customer", "Manager"]
+        })
+        .then(function(answer) {
+            if (answer.customerOrManager.toUpperCase() === "CUSTOMER") {
+                 customerPurchase();
+            } else {
+                // manager();
+            }
+        });
+}
 
-        console.log(typeof typeMe);
-    })
-};
-
-// This function gets the data from the db and formats it with a loop
-function retrieveDatabaseData () {
-    connection.query("SELECT * FROM products", function(err, res){
+function customerPurchase() {
+    // querry db for all of the items being auctioned
+    connection.query("SELECT * FROM products", function(err, results) {
         if (err) throw err;
-        // console.log(res);
-        console.log("Items for Sale: ")
-        console.log("-------------");
-
-        var itemList = [];
-        for (var i = 0; i < res.length; i++) {
-            
-            itemList.push(res[i]);
-            
-            console.log("Id:" + itemList[i].id + " " + res[i].product_name + " " + "$" + res[i].price);
-        }
-        startSalePrompt();
-    })
-};
-
-
-
-// Section 3
-// Main Process
-
-
-
+        // pompt the user for which item they'd like to bid
+        inquirer
+            .prompt([
+                {
+                    name: "choice",
+                    type: "rawlist",
+                    choices: function() {
+                        var choiceArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].product_name);
+                        }
+                        return choiceArray;
+                    },
+                    message: "What item would you like to purchase?"
+                },
+                {
+                    name: "quantity",
+                    type: "input",
+                    message: "How many would you like to purchase?"
+                }
+            ])
+            .then(function(answer) {
+                // get the information of the choosen item
+                var chosenItem;
+                for (var i = 0; i < results.length; i++) {
+                    if (results[i].product_name === answer.choice) {
+                        chosenItem = results[i];
+                    }
+                }
+                // tests and debuuging
+                // console.log(chosenItem);
+                // if 
+                if (chosenItem.stock_quantity > 0) {
+                    var newQuantity = parseInt(chosenItem.stock_quantity) - parseInt(answer.quantity);
+                    console.log(newQuantity);
+                }
+            })
+    }) 
+}
