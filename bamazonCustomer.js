@@ -82,7 +82,26 @@ function customerPurchase() {
                 if (chosenItem.stock_quantity > 0) {
                     var newQuantity = parseInt(chosenItem.stock_quantity) - parseInt(answer.quantity);
                     console.log(newQuantity);
+
+                    connection.query("UPDATE products SET ? WHERE ?", 
+                    [
+                        {
+                            stock_quantity: newQuantity   
+                        },
+                        {
+                           id: chosenItem.id 
+                        }
+                    ],
+                    function(error) {
+                        if (err) throw err;
+                        console.log("Purchase complete!");
+                        start();
+                    }
+                )
+                } else {
+                    console.log("Sorry not enough quantity of " + chosenItem.product_name);
+                    start();
                 }
-            })
-    }) 
+            });
+    });
 }
